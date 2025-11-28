@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Lightit\Doctors\App\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Lightit\Doctors\Domain\DataTransferObjects\DoctorDto;
 
 class StoreDoctorRequest extends FormRequest
 {
@@ -21,10 +20,8 @@ class StoreDoctorRequest extends FormRequest
         ];
     }
 
-    public function toDto(): DoctorDto
+    public function getName(): string
     {
-        return new DoctorDto(
-            name: $this->string(self::NAME)->toString(),
-        );
+        return $this->string(self::NAME)->toString();
     }
 }

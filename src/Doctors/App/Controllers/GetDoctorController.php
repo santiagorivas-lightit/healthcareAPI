@@ -10,7 +10,7 @@ use Lightit\Doctors\App\Resources\DoctorResource;
 use Lightit\Doctors\Domain\Models\Doctor;
 
 #[Group('Doctors')]
-final readonly class GetDoctorController
+final class GetDoctorController
 {
     public function __invoke(Doctor $doctor): JsonResponse
     {

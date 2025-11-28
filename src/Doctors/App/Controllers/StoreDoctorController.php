@@ -15,7 +15,7 @@ final readonly class StoreDoctorController
 {
     public function __invoke(StoreDoctorRequest $request, StoreDoctorAction $storeDoctorAction): JsonResponse
     {
-        $doctor = $storeDoctorAction->execute($request->toDto());
+        $doctor = $storeDoctorAction->execute($request->getName());
 
         return DoctorResource::make($doctor)
             ->response()

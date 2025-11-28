@@ -17,7 +17,7 @@ class ListDoctorAction
     {
         return QueryBuilder::for(Doctor::class)
             ->allowedFilters(['name'])
-            ->orderBy('id', 'desc')
+            ->orderByDesc('id')
             ->paginate();
     }
 }

@@ -8,6 +8,8 @@ readonly class DoctorDto
 {
     public function __construct(
         public string $name,
+
+        /** @var string[] **/
         public array $assignedClinics = [],
     ) {
     }
