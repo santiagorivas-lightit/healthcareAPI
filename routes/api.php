@@ -60,3 +60,20 @@ Route::prefix('doctors')
         Route::delete('/{doctor}', DeleteDoctorController::class)
             ->whereNumber('doctor');
     });
+
+    /*
+|--------------------------------------------------------------------------
+| Clinics Routes
+|--------------------------------------------------------------------------
+*/
+Route::prefix('clinics')
+    ->middleware([])
+    ->group(static function (): void {
+        Route::get('/', ListClinicController::class);
+        Route::get('/{clinic}', GetClinicController::class)
+            ->withTrashed()
+            ->whereNumber('clinic');
+        Route::post('/', StoreClinicController::class);
+        Route::delete('/{clinic}', DeleteClinicController::class)
+            ->whereNumber('clinic');
+    });
