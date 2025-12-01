@@ -17,6 +17,7 @@ class ListClinicAction
     {
         return QueryBuilder::for(Clinic::class)
             ->allowedFilters(['name', 'address'])
+            ->withCount('doctors')
             ->orderByDesc('id')
             ->paginate();
     }

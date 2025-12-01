@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Lightit\Doctors\App\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use Lightit\Clinics\Domain\Models\Clinic;
 
 class AssignClinicToDoctorRequest extends FormRequest
 {
     public const string CLINIC_ID = 'clinicId';
-    
+
     /**
      * @return array<string, mixed>
      */
@@ -22,6 +24,6 @@ class AssignClinicToDoctorRequest extends FormRequest
 
     public function getClinicId(): int
     {
-        return $this->int(self::CLINIC_ID)->toInteger();
+        return $this->integer(self::CLINIC_ID);
     }
 }
