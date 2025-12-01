@@ -45,13 +45,12 @@ Route::prefix('users')
     });
 
 
-    /*
+/*
 |--------------------------------------------------------------------------
 | Doctors Routes
 |--------------------------------------------------------------------------
 */
 Route::prefix('doctors')
-    ->middleware([])
     ->group(static function (): void {
         Route::get('/', ListDoctorController::class);
         Route::get('/{doctor}', GetDoctorController::class)
