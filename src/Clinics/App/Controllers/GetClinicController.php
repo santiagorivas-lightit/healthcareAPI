@@ -10,7 +10,7 @@ use Lightit\Clinics\App\Resources\ClinicResource;
 use Lightit\Clinics\Domain\Models\Clinic;
 
 #[Group('Clinics')]
-final readonly class GetClinicController
+final class GetClinicController
 {
     public function __invoke(Clinic $clinic): JsonResponse
     {

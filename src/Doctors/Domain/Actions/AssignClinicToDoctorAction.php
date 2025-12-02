@@ -9,12 +9,12 @@ use Lightit\Doctors\Domain\Models\Doctor;
 
 class AssignClinicToDoctorAction
 {
-    public function execute(Doctor $doctor, int $clinicId): void
+    public function execute(Doctor $doctor, int $clinic_id): void
     {
-        if ($doctor->clinics()->where('id', $clinicId)->exists()) {
+        if ($doctor->clinics()->wherePivot('clinic_id', $clinic_id)->exists()) {
             throw new ClinicAlreadyAssignToDoctorException();
         }
 
-        $doctor->clinics()->attach($clinicId);
+        $doctor->clinics()->attach($clinic_id);
     }
 }
