@@ -7,9 +7,11 @@ namespace Lightit\Users\Domain\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Lightit\Appointments\Domain\Models\Appointment;
 
 /**
  * Domain\Users\Models\User
@@ -82,5 +84,10 @@ class User extends Authenticatable
                 return strtolower($value);
             },
         );
+    }
+
+    public function appointments(): HasMany
+    {
+        return $this->hasMany(Appointment::class);
     }
 }

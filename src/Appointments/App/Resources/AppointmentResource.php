@@ -1,0 +1,26 @@
+<?php
+
+namespace Lightit\Appointments\App\Resources;
+
+use Dedoc\Scramble\Attributes\SchemaName;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Request;
+use Lightit\Clinics\App\Resources\ClinicResource;
+use Lightit\Doctors\App\Resources\DoctorResource;
+use Lightit\Users\App\Resources\UserResource;
+
+#[SchemaName('Appointment')]
+class AppointmentResource extends JsonResource
+{
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' => $this->id,
+            'doctor' => DoctorResource::make($this->whenLoaded('doctor')),
+            'clinic' => ClinicResource::make($this->whenLoaded('clinic')),
+            'user' => UserResource::make($this->whenLoaded('user')),
+            'starts_at' => $this->starts_at,
+            'ends_at' => $this->ends_at,
+        ];
+    }
+}

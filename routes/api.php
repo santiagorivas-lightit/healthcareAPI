@@ -24,6 +24,7 @@ use Lightit\Clinics\App\Controllers\{
     ListClinicController,
     StoreClinicController
  };
+use Lightit\Appointments\App\Controllers\{StoreAppointmentController, DeleteAppointmentController};
 
 /*
 |--------------------------------------------------------------------------
@@ -90,4 +91,16 @@ Route::prefix('clinics')
             Route::get('/', GetClinicController::class)->withTrashed();
             Route::delete('/', DeleteClinicController::class);
         })->whereNumber('clinic');
+    });
+
+/*
+|--------------------------------------------------------------------------
+| Appointments Routes
+|--------------------------------------------------------------------------
+*/
+Route::prefix('appointments')
+    ->group(static function (): void {
+        Route::post('/', StoreAppointmentController::class);
+        Route::delete('/{appointment}', DeleteAppointmentController::class)
+            ->whereNumber('appointment');
     });
