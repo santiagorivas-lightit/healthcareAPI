@@ -6,6 +6,7 @@ namespace Lightit\Doctors\Domain\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Lightit\Clinics\Domain\Models\Clinic;
 
 class Doctor extends Model
@@ -13,7 +14,7 @@ class Doctor extends Model
     protected $guarded = ['id'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<\Lightit\Clinics\Domain\Models\Clinic, $this, \Illuminate\Database\Eloquent\Relations\Pivot>
+     * @return BelongsToMany<Clinic, $this, Pivot>
      */
     public function clinics(): BelongsToMany
     {

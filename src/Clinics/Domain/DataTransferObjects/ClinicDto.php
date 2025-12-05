@@ -9,7 +9,6 @@ readonly class ClinicDto
     public function __construct(
         public string $name,
         public string $address,
-        public int $numberOfDoctors = 0,
     ) {
     }
 }

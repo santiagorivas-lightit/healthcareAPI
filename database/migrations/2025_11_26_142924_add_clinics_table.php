@@ -13,7 +13,7 @@ return new class extends Migration
         Schema::create('clinics', function (Blueprint $table): void {
             $table->id();
             $table->string('name');
-            $table->string('address')->unique();
+            $table->string('address');
             $table->timestamp('created_at');
             $table->timestamp('updated_at');
         });

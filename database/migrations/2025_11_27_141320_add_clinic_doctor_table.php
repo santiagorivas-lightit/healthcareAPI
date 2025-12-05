@@ -12,10 +12,8 @@ return new class extends Migration
     {
          Schema::create('clinic_doctor', function (Blueprint $table): void {
             $table->id();
-            $table->foreignId('clinic_id');
-            $table->foreignId('doctor_id');
-            $table->timestamp('created_at');
-            $table->timestamp('updated_at');
+            $table->foreignId('clinic_id')->constrained();
+            $table->foreignId('doctor_id')->constrained();
         });
     }
 

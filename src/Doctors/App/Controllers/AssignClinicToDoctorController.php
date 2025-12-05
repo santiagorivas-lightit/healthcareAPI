@@ -20,6 +20,6 @@ final readonly class AssignClinicToDoctorController
     ): JsonResponse {
         $assignClinicToDoctorAction->execute($doctor, $request->getClinicId());
 
-        return response()->json(null, JsonResponse::HTTP_NO_CONTENT);
+        return response()->json(null, JsonResponse::HTTP_OK);
     }
 }
