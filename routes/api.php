@@ -53,9 +53,9 @@ Route::prefix('users')
     ->group(static function (): void {
         Route::get('/', ListUserController::class);
         Route::post('/', StoreUserController::class);
-        Route::prefix('user')->group(static function (): void {
+        Route::prefix('/{user}')->group(static function (): void {
             Route::get('/', GetUserController::class)->withTrashed();
-            Route::put('/', UpdateUserController::class);
+            Route::put('/',  UpdateUserController::class);
             Route::delete('/', DeleteUserController::class);
         })->whereNumber('user');
     });
@@ -70,7 +70,7 @@ Route::prefix('doctors')
     ->group(static function (): void {
         Route::get('/', ListDoctorController::class);
         Route::post('/', StoreDoctorController::class);
-        Route::prefix('{doctor}')->group(static function (): void {
+        Route::prefix('/{doctor}')->group(static function (): void {
             Route::get('/', GetDoctorController::class)->withTrashed();
             Route::put('/', AssignClinicToDoctorController::class);
             Route::delete('/', DeleteDoctorController::class);
@@ -86,7 +86,7 @@ Route::prefix('clinics')
     ->group(static function (): void {
         Route::get('/', ListClinicController::class);
         Route::post('/', StoreClinicController::class);
-        Route::prefix('{clinic}')->group(static function (): void {
+        Route::prefix('/{clinic}')->group(static function (): void {
             Route::get('/', GetClinicController::class)->withTrashed();
             Route::delete('/', DeleteClinicController::class);
         })->whereNumber('clinic');
