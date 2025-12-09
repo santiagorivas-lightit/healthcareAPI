@@ -20,9 +20,12 @@ class Doctor extends Model
      */
     public function clinics(): BelongsToMany
     {
-        return $this->belongsToMany(Clinic::class)->withTimestamps();
+        return $this->belongsToMany(Clinic::class);
     }
 
+    /**
+     * @return HasMany<Appointment, $this>
+     */
     public function appointments(): HasMany
     {
         return $this->hasMany(Appointment::class);

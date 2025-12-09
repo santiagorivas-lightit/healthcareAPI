@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace Lightit\Appointments\Domain\Actions;
 
-use Lightit\Appointments\App\Exceptions\{
-    doctorNotAssignedToSelectedClinicException,
-    overlappingAppointmensException
-};
 use Illuminate\Support\Carbon;
+use Lightit\Appointments\App\Exceptions\doctorNotAssignedToSelectedClinicException;
+use Lightit\Appointments\App\Exceptions\overlappingAppointmensException;
 use Lightit\Appointments\Domain\DataTransferObjects\AppointmentDTO;
 use Lightit\Appointments\Domain\Models\Appointment;
 use Lightit\Doctors\Domain\Models\Doctor;
-use Lightit\Users\Domain\Models\User;
 
 class StoreAppointmentAction
 {
@@ -24,7 +21,7 @@ class StoreAppointmentAction
             throw new doctorNotAssignedToSelectedClinicException();
         }
 
-        if ($this->overlappingAppointmentsExist($appointmentDto)){
+        if ($this->overlappingAppointmentsExist($appointmentDto)) {
             throw new overlappingAppointmensException();
         }
 
@@ -39,28 +36,24 @@ class StoreAppointmentAction
         return $appointment;
     }
 
-    private function doctorWorksAtSelectedClinic(AppointmentDTO $appointmentDto) : bool
+    private function doctorWorksAtSelectedClinic(AppointmentDTO $appointmentDto): bool
     {
-        $doctor = Doctor::findOrFail($appointmentDto->doctorId);
+        $doctor = \Lightit\Doctors\Domain\Models\Doctor::query()->findOrFail($appointmentDto->doctorId);
 
         return $doctor->clinics()
             ->where('clinic_id', $appointmentDto->clinicId)
             ->exists();
     }
 
-    /**
-     * @param AppointmentDTO $appointmentDto
-     * @return bool
-     */
     private function overlappingAppointmentsExist(AppointmentDTO $appointmentDto): bool
     {
-        $date = Carbon::parse($appointmentDto->startsAt)->toDateString();
+        $date = \Illuminate\Support\Facades\Date::parse($appointmentDto->startsAt)->toDateString();
 
         return Appointment::query()
             ->whereDate('starts_at', '=', $date)
             ->where('starts_at', '<', $appointmentDto->endsAt)
             ->where('ends_at', '>', $appointmentDto->startsAt)
-            ->where(function ($query) use ($appointmentDto) {
+            ->where(function (\Illuminate\Contracts\Database\Query\Builder $query) use ($appointmentDto): void {
                 $query->where('doctor_id', $appointmentDto->doctorId)
                     ->orWhere('user_id', $appointmentDto->userId);
             })

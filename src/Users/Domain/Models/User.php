@@ -86,6 +86,9 @@ class User extends Authenticatable
         );
     }
 
+    /**
+     * @return HasMany<Appointment, $this>
+     */
     public function appointments(): HasMany
     {
         return $this->hasMany(Appointment::class);
