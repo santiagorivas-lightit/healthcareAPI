@@ -9,7 +9,7 @@ use Lightit\Appointments\App\Requests\StoreAppointmentRequest;
 use Lightit\Appointments\App\Resources\AppointmentResource;
 use Lightit\Appointments\Domain\Actions\StoreAppointmentAction;
 
-final readonly class StoreAppointmentController
+final class StoreAppointmentController
 {
     public function __invoke(
         StoreAppointmentRequest $request,

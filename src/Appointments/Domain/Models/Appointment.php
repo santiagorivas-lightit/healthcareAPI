@@ -22,11 +22,14 @@ class Appointment extends Model
 {
     protected $guarded = ['id'];
 
-    protected $casts = [
+    protected function casts(): array
+    {
+        return [
             'starts_at' => 'immutable_datetime',
             'ends_at' => 'immutable_datetime',
             'deleted_at' => 'immutable_datetime',
         ];
+    }
 
     /**
      * @return BelongsTo<Doctor, $this>

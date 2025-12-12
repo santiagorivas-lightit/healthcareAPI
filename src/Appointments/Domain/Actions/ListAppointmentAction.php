@@ -6,7 +6,6 @@ namespace Lightit\Appointments\Domain\Actions;
 
 use Illuminate\Pagination\LengthAwarePaginator;
 use Lightit\Appointments\Domain\Models\Appointment;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class ListAppointmentAction
 {
@@ -15,8 +14,7 @@ class ListAppointmentAction
      */
     public function execute(): LengthAwarePaginator
     {
-        return QueryBuilder::for(Appointment::class)
-            ->with(['doctor', 'clinic', 'user'])
+        return Appointment::with(['doctor', 'clinic', 'user'])
             ->orderByDesc('id')
             ->paginate();
     }

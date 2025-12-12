@@ -8,7 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Lightit\Appointments\App\Resources\AppointmentResource;
 use Lightit\Appointments\Domain\Actions\ListAppointmentAction;
 
-final readonly class ListAppointmentController
+final class ListAppointmentController
 {
     public function __invoke(
         ListAppointmentAction $action,

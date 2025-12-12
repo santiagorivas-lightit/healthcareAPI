@@ -1,21 +1,21 @@
 <?php
 
-
 declare(strict_types=1);
 
 namespace Lightit\Appointments\App\Exceptions;
 
+use Illuminate\Http\Response;
 use Lightit\Shared\App\Exceptions\Http\HttpException;
 
-class doctorNotAssignedToSelectedClinicException extends HttpException
+class OverlappingAppointmentsException extends HttpException
 {
     /**
      * An HTTP status code.
      */
-    protected int $status = 409; //JsonResponse::HTTP_CONFLICT;
+    protected int $status = Response::HTTP_CONFLICT;
 
     /**
      * An error code.
      */
-    protected string $errorCode = 'This doctor does not work on the selected clinic';
+    protected string $errorCode = 'The appointment can not be overlapped';
 }

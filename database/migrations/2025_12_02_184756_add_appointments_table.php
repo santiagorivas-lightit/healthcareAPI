@@ -19,7 +19,7 @@ return new class extends Migration
             $table->dateTime('ends_at');
             $table->timestamp('created_at');
             $table->timestamp('updated_at');
-            $table->timestamp('deleted_at')->nullable();
+            $table->softDeletes();
         });
     }
 
