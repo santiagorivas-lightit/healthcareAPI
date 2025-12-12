@@ -8,6 +8,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Lightit\Users\App\Controllers\GetUserController;
 use Lightit\Users\App\Resources\UserResource;
+use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;
 
 describe('users', function (): void {
@@ -15,7 +16,7 @@ describe('users', function (): void {
     it('retrieves a user and returns a successful response', function (): void {
         $existingUser = UserFactory::new()->createOne();
 
-        getJson("api/users/$existingUser->id")
+        actingAs($existingUser, 'api')->getJson("api/users/$existingUser->id")
             ->assertOk()
             ->assertJson(
                 fn (AssertableJson $json): AssertableJson =>
@@ -28,9 +29,9 @@ describe('users', function (): void {
             );
     });
 
-    it('returns a 404 response when user is not found', function (): void {
+    it('returns a 401 response when user is not found', function (): void {
         $nonExistentUserId = 99999;
 
-        getJson("api/users/{$nonExistentUserId}")->assertNotFound();
+        getJson("api/users/{$nonExistentUserId}")->assertUnauthorized();
     });
 });

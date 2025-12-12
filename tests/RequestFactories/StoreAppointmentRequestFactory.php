@@ -7,7 +7,6 @@ namespace Tests\RequestFactories;
 use Carbon\CarbonImmutable;
 use Database\Factories\ClinicFactory;
 use Database\Factories\DoctorFactory;
-use Database\Factories\UserFactory;
 use Worksome\RequestFactories\RequestFactory;
 
 class StoreAppointmentRequestFactory extends RequestFactory
@@ -21,7 +20,6 @@ class StoreAppointmentRequestFactory extends RequestFactory
         $doctor->clinics()->attach($clinic);
 
         return [
-            'userId' => UserFactory::new(),
             'doctorId' => $doctor->id,
             'clinicId' =>$clinic->id,
             'startsAt' => CarbonImmutable::parse($starts),

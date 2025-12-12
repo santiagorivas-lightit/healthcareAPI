@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Support\Facades\Route;
+use Lightit\Authentication\App\Controllers\{
+    LoginController,
+    LogoutController,
+    RefreshController
+};
 use Lightit\Users\App\Controllers\{
     GetUserController,
     DeleteUserController,
@@ -50,19 +55,43 @@ Route::middleware('auth:sanctum')
 
 /*
 |--------------------------------------------------------------------------
+| Auth Route
+|--------------------------------------------------------------------------
+*/
+Route::prefix('auth')->group(static function (): void {
+    Route::post('login', LoginController::class);
+    Route::middleware(['auth'])->group(static function (): void {
+        Route::post('logout', LogoutController::class);
+        Route::post('refresh', RefreshController::class);
+    });
+});
+
+/*
+|--------------------------------------------------------------------------
 | Users Routes
 |--------------------------------------------------------------------------
 */
 Route::prefix('users')
-    ->middleware([])
     ->group(static function (): void {
         Route::get('/', ListUserController::class);
         Route::post('/', StoreUserController::class);
-        Route::prefix('/{user}')->group(static function (): void {
+        Route::prefix('/{user}')
+            ->middleware(['auth'])
+            ->group(static function (): void {
+
             Route::get('/', GetUserController::class)->withTrashed();
             Route::put('/',  UpdateUserController::class);
             Route::delete('/', DeleteUserController::class);
-        })->whereNumber('user');
+
+            Route::prefix('appointments')
+                ->group(static function (): void {
+                    Route::get('/', ListAppointmentController::class);
+                    Route::post('/', StoreAppointmentController::class);
+                    Route::delete('/{appointment}', DeleteAppointmentController::class)
+                        ->whereNumber('appointment');
+                });
+
+            })->whereNumber('user');
     });
 
 
@@ -95,17 +124,4 @@ Route::prefix('clinics')
             Route::get('/', GetClinicController::class)->withTrashed();
             Route::delete('/', DeleteClinicController::class);
         })->whereNumber('clinic');
-    });
-
-/*
-|--------------------------------------------------------------------------
-| Appointments Routes
-|--------------------------------------------------------------------------
-*/
-Route::prefix('appointments')
-    ->group(static function (): void {
-        Route::get('/', ListAppointmentController::class);
-        Route::post('/', StoreAppointmentController::class);
-        Route::delete('/{appointment}', DeleteAppointmentController::class)
-            ->whereNumber('appointment');
     });
