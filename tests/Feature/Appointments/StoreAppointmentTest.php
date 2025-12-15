@@ -15,7 +15,7 @@ use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\assertDatabaseMissing;
 
 describe('appointments', function (): void {
-    it(description: 'can create an appointment successfully', closure: function (): void {
+    it('can create an appointment successfully', function (): void {
         $data = StoreAppointmentRequestFactory::new()->create();
         $user = UserFactory::new()->createOne();
 
@@ -29,20 +29,19 @@ describe('appointments', function (): void {
         ]);
     });
 
-    it(
-        description: 'can not create an appointment with unassigned doctor to selected clinic',
-        closure: function (): void {
+    it('can not create an appointment with unassigned doctor to selected clinic',
+         function (): void {
             $data = StoreAppointmentRequestFactory::new()->create();
             $user = UserFactory::new()->createOne();
-    
+
             /** @var Doctor $doctor**/
             $doctor = DoctorFactory::new()->createOne();
             $data['doctorId'] = $doctor->id;
-    
+
             $response = actingAs($user, 'api')->postJson(url("/api/users/$user->id/appointments"), $data);
-    
+
             $response->assertStatus(409);
-    
+
             assertDatabaseMissing('appointments', [
                 'doctor_id' => $data['doctorId'],
                 'user_id' => $user->id,
@@ -50,32 +49,31 @@ describe('appointments', function (): void {
         }
     );
 
-    it(
-        description: 'can not create an appointment that overlaps with an existing doctor schedule',
-        closure: function (): void {
+    it('can not create an appointment that overlaps with an existing doctor schedule',
+        function (): void {
             $originalAppointment = StoreAppointmentRequestFactory::new()->create();
             $userOriginal = UserFactory::new()->createOne();
-    
+
             actingAs($userOriginal, 'api')->postJson(
                 url("/api/users/$userOriginal->id/appointments"),
                 $originalAppointment
             );
-    
+
             $data = $originalAppointment;
-    
+
             /** @var User $user**/
             $user = UserFactory::new()->createOne();
             $response = actingAs($user, 'api')->postJson(url("/api/users/$user->id/appointments"), $data);
-    
+
             $response->assertStatus(409);
-    
+
             assertDatabaseMissing('appointments', [
                 'user_id' => $user->id,
             ]);
         }
     );
 
-    it(description: 'can not create an appointment that overlaps another of the same user', closure: function (): void {
+    it('can not create an appointment that overlaps another of the same user', function (): void {
         $originalAppointment = StoreAppointmentRequestFactory::new()->create();
         $user = UserFactory::new()->createOne();
 
@@ -96,26 +94,25 @@ describe('appointments', function (): void {
         ]);
     });
 
-    it(
-        description: 'can create an appointment with same schedule for different doctor and user',
-        closure: function (): void {
+    it('can create an appointment with same schedule for different doctor and user',
+        function (): void {
             $originalAppointment = StoreAppointmentRequestFactory::new()->create();
             $userOriginal = UserFactory::new()->createOne();
-    
+
             actingAs($userOriginal, 'api')->postJson(
                 url("/api/users/$userOriginal->id/appointments"),
                 $originalAppointment
             );
-    
+
             $data = StoreAppointmentRequestFactory::new()->create();
             $data['startsAt'] = $originalAppointment['startsAt'];
             $data['endsAt'] = $originalAppointment['endsAt'];
-    
+
             $user = UserFactory::new()->createOne();
             $response = actingAs($user, 'api')->postJson(url("/api/users/$user->id/appointments"), $data);
-    
+
             $response->assertCreated();
-    
+
             assertDatabaseHas('appointments', [
                 'doctor_id' => $data['doctorId'],
                 'user_id' => $user->id,
@@ -123,7 +120,7 @@ describe('appointments', function (): void {
         }
     );
 
-    it(description: 'appointment cannot be scheduled in the past', closure: function (): void {
+    it('appointment cannot be scheduled in the past', function (): void {
         $data = StoreAppointmentRequestFactory::new()->create();
 
         $starts = fake()->dateTimeBetween('1800-01-01', '1800-12-31');
@@ -144,7 +141,7 @@ describe('appointments', function (): void {
         ]);
     });
 
-    it(description: 'appointment ends_at must be after starts_at', closure: function (): void {
+    it('appointment ends_at must be after starts_at', function (): void {
         $data = StoreAppointmentRequestFactory::new()->create();
 
         $starts = fake()->dateTimeBetween('1800-01-01', '1800-12-31');
@@ -165,7 +162,7 @@ describe('appointments', function (): void {
         ]);
     });
 
-    it(description: 'user can have multiple appointments, but not overlapping ones', closure: function (): void {
+    it('user can have multiple appointments, but not overlapping ones', function (): void {
         $originalAppointment = StoreAppointmentRequestFactory::new()->create();
         $user = UserFactory::new()->createOne();
 
