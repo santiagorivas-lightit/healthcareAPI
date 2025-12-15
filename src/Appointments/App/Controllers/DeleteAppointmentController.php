@@ -6,15 +6,14 @@ namespace Lightit\Appointments\App\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Lightit\Appointments\App\Resources\AppointmentResource;
-use Lightit\Appointments\Domain\Actions\DeleteAppointmentAction;
 use Lightit\Appointments\Domain\Models\Appointment;
 use Lightit\Users\Domain\Models\User;
 
 final class DeleteAppointmentController
 {
-    public function __invoke(User $user, Appointment $appointment, DeleteAppointmentAction $action): JsonResponse
+    public function __invoke(User $user, Appointment $appointment): JsonResponse
     {
-        $appointment = $action->execute($user, $appointment);
+        $appointment = $appointment->deleteOrFail();
 
         return AppointmentResource::make($appointment)
             ->response();

@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace Lightit\Appointments\Domain\Actions;
 
-use Illuminate\Contracts\Database\Query\Builder;
-use Illuminate\Support\Facades\Date;
-use Lightit\Appointments\App\Exceptions\doctorNotAssignedToSelectedClinicException;
-use Lightit\Appointments\App\Exceptions\overlappingAppointmensException;
 use Carbon\CarbonImmutable;
 use Illuminate\Contracts\Database\Query\Builder;
 use Lightit\Appointments\App\Exceptions\DoctorNotAssignedToSelectedClinicException;
@@ -28,8 +24,6 @@ class StoreAppointmentAction
         }
 
         if ($this->overlappingAppointmentsExist($user, $appointmentDto)) {
-            throw new overlappingAppointmensException();
-        if ($this->overlappingAppointmentsExist($appointmentDto)) {
             throw new OverlappingAppointmentsException();
         }
 
