@@ -20,9 +20,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        UserFactory::new()->createMany(10);
-        $clinics = ClinicFactory::new()->createMany(10);
-        $doctors = DoctorFactory::new()->withClinics($clinics)->createMany(10);
-        AppointmentFactory::new()->recycle($clinics, $doctors)->createMany(15);
+        UserFactory::new()->createMany(5);
+        $clinics = ClinicFactory::new()->createMany(5);
+        $doctors = DoctorFactory::new()->withClinics($clinics)->createMany(5);
+        AppointmentFactory::new()->recycle($clinics, $doctors)->createMany(5);
     }
 }
