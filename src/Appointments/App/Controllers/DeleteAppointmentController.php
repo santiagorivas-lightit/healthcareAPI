@@ -13,7 +13,7 @@ final class DeleteAppointmentController
 {
     public function __invoke(User $user, Appointment $appointment): JsonResponse
     {
-        $appointment = $appointment->deleteOrFail();
+        $appointment->deleteOrFail();
 
         return AppointmentResource::make($appointment)
             ->response();

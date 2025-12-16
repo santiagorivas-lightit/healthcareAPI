@@ -29,8 +29,9 @@ describe('appointments', function (): void {
         ]);
     });
 
-    it('can not create an appointment with unassigned doctor to selected clinic',
-         function (): void {
+    it(
+        'can not create an appointment with unassigned doctor to selected clinic',
+        function (): void {
             $data = StoreAppointmentRequestFactory::new()->create();
             $user = UserFactory::new()->createOne();
 
@@ -49,7 +50,8 @@ describe('appointments', function (): void {
         }
     );
 
-    it('can not create an appointment that overlaps with an existing doctor schedule',
+    it(
+        'can not create an appointment that overlaps with an existing doctor schedule',
         function (): void {
             $originalAppointment = StoreAppointmentRequestFactory::new()->create();
             $userOriginal = UserFactory::new()->createOne();
@@ -94,7 +96,8 @@ describe('appointments', function (): void {
         ]);
     });
 
-    it('can create an appointment with same schedule for different doctor and user',
+    it(
+        'can create an appointment with same schedule for different doctor and user',
         function (): void {
             $originalAppointment = StoreAppointmentRequestFactory::new()->create();
             $userOriginal = UserFactory::new()->createOne();
