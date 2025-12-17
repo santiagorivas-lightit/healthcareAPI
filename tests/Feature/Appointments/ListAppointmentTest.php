@@ -13,6 +13,6 @@ describe('appointments', function (): void {
         $user = UserFactory::new()->createOne();
         AppointmentFactory::new()->forUser($user)->createMany(5);
         $response = actingAs($user, 'api')->getJson(url("/api/users/$user->id/appointments"));
-        $response->assertJsonCount(5);
+        $response->assertJsonCount(5, 'data');
     });
 });

@@ -15,7 +15,7 @@ final class ListAppointmentController
         #[CurrentUser]
         User $user,
     ): JsonResponse {
-        return AppointmentResource::collection($user->appointments())
+        return AppointmentResource::collection($user->appointments)
             ->response();
     }
 }
