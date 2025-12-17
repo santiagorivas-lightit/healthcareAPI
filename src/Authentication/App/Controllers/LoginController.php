@@ -11,9 +11,9 @@ use Lightit\Authentication\Domain\Actions\LoginAction;
 
 class LoginController
 {
-    public function __invoke(LoginRequest $request, LoginAction $loginAction): JsonResponse
+    public function __invoke(LoginRequest $request, LoginAction $action): JsonResponse
     {
-        $loginDto = $loginAction->execute($request->toDto());
+        $loginDto = $action->execute($request->toDto());
 
         return LoginResource::make($loginDto)
             ->response();

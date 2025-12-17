@@ -10,11 +10,13 @@ use Lightit\Users\Domain\Models\User;
 use PHPOpenSourceSaver\JWTAuth\Factory as JWTAuth;
 use PHPOpenSourceSaver\JWTAuth\JWTGuard;
 
-final class LoginByUserAction
+final readonly class LoginByUserAction
 {
+    public const int MINUTES_TO_SECONDS = 60;
+
     public function __construct(
-        private readonly AuthFactory $factory,
-        private readonly JWTAuth $jwtAuth,
+        private AuthFactory $factory,
+        private JWTAuth $jwtAuth,
     ) {
     }
 
@@ -28,8 +30,8 @@ final class LoginByUserAction
 
         return new LoginDto(
             accessToken: $token,
-            tokenType: 'bearer',
-            expiresIn: $this->jwtAuth->getTTL() * 60,
+            tokenType: 'Bearer',
+            expiresIn: $this->jwtAuth->getTTL() * self::MINUTES_TO_SECONDS,
         );
     }
 }

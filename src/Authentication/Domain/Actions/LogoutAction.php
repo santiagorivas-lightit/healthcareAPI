@@ -7,10 +7,10 @@ namespace Lightit\Authentication\Domain\Actions;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use PHPOpenSourceSaver\JWTAuth\JWTGuard;
 
-class LogoutAction
+final readonly class LogoutAction
 {
     public function __construct(
-        private readonly AuthFactory $factory,
+        private AuthFactory $factory,
     ) {
     }
 
