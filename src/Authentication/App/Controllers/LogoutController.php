@@ -9,10 +9,10 @@ use Lightit\Authentication\Domain\Actions\LogoutAction;
 
 class LogoutController
 {
-    public function __invoke(LogoutAction $logoutAction): JsonResponse
+    public function __invoke(LogoutAction $action): JsonResponse
     {
-        $logoutAction->execute();
+        $action->execute();
 
-        return response()->json(status: JsonResponse::HTTP_NO_CONTENT);
+        return response()->json(JsonResponse::HTTP_NO_CONTENT);
     }
 }

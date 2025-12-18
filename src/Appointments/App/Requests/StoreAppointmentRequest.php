@@ -29,8 +29,8 @@ class StoreAppointmentRequest extends FormRequest
         return [
             self::CLINIC_ID => ['required', Rule::exists(Clinic::class, 'id')],
             self::DOCTOR_ID => ['required', Rule::exists(Doctor::class, 'id')],
-            self::STARTS_AT => ['required', 'date', Rule::date()->after(CarbonImmutable::now())],
-            self::ENDS_AT => ['required', 'date', Rule::date()->after(self::STARTS_AT)],
+            self::STARTS_AT => ['required', Rule::date()->after(CarbonImmutable::now())],
+            self::ENDS_AT => ['required', Rule::date()->after(self::STARTS_AT)],
         ];
     }
 
