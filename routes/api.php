@@ -125,3 +125,16 @@ Route::prefix('clinics')
             Route::delete('/', DeleteClinicController::class);
         })->whereNumber('clinic');
     });
+
+/*
+|--------------------------------------------------------------------------
+| Appointments Routes
+|--------------------------------------------------------------------------
+*/
+Route::prefix('appointments')
+    ->group(static function (): void {
+        Route::get('/', ListAppointmentController::class);
+        Route::post('/', StoreAppointmentController::class);
+        Route::delete('/{appointment}', DeleteAppointmentController::class)
+            ->whereNumber('appointment');
+    });
