@@ -13,6 +13,6 @@ class LogoutController
     {
         $action->execute();
 
-        return response()->json(JsonResponse::HTTP_NO_CONTENT);
+        return response()->json(status: JsonResponse::HTTP_NO_CONTENT);
     }
 }
