@@ -24,13 +24,13 @@ class DoctorFactory extends Factory
     }
 
     /**
-     * @param Collection<int, Clinic> $clinics
+     * @param Collection<int, Clinic>| Clinic $clinics
      * @return static
      */
-    public function withClinics(Collection $clinics): static
+    public function withClinics(Collection | Clinic $clinics): static
     {
         return $this->afterCreating(function (Doctor $doctor) use ($clinics) {
-            $doctor->clinics()->attach($clinics);
+            $doctor->clinics()->sync($clinics);
         });
     }
 }

@@ -11,13 +11,4 @@ readonly class CredentialsDto
         public string $password,
     ) {
     }
-
-    /** @return array<string, string> */
-    public function toArray(): array
-    {
-        return [
-            'email' => $this->email,
-            'password' => $this->password,
-        ];
-    }
 }
