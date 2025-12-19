@@ -208,14 +208,10 @@ describe('appointments', function (): void {
 
         $data = $originalAppointment;
 
-        /** @var string $startsAtString */
-        $startsAtString = $originalAppointment['startsAt'];
 
-        /** @var string $endsAtString */
-        $endsAtString = $originalAppointment['endsAt'];
 
-        $data['startsAt'] = CarbonImmutable::parse($startsAtString)->addDay();
-        $data['endsAt'] = CarbonImmutable::parse($endsAtString)->addDay();
+        $data['startsAt'] = $originalAppointment['startsAt']->addDay();
+        $data['endsAt'] = $originalAppointment['endsAt']->addDay();
 
         $response = actingAs($user, 'api')->postJson(url("/api/users/$user->id/appointments"), $data);
         $response->assertCreated();
