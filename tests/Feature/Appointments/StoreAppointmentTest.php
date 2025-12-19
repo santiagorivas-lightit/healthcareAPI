@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\Appointments;
 
 use Carbon\CarbonImmutable;
+use Database\Factories\ClinicFactory;
 use Database\Factories\DoctorFactory;
 use Database\Factories\UserFactory;
 use Lightit\Doctors\Domain\Models\Doctor;
@@ -16,7 +17,16 @@ use function Pest\Laravel\assertDatabaseMissing;
 
 describe('appointments', function (): void {
     it('can create an appointment successfully', function (): void {
-        $data = StoreAppointmentRequestFactory::new()->create();
+        $doctor = DoctorFactory::new()->createOne();
+        $clinic = ClinicFactory::new()->createOne();
+        $doctor->clinics()->sync($clinic);
+        $starts = CarbonImmutable::now();
+        $data = [
+            'doctorId' => $doctor->id,
+            'clinicId' => $clinic->id,
+            'startsAt' => $starts,
+            'endsAt' => $starts->addHour(),
+        ];
         $user = UserFactory::new()->createOne();
 
         $response = actingAs($user, 'api')->postJson(url("/api/users/$user->id/appointments"), $data);
@@ -99,7 +109,16 @@ describe('appointments', function (): void {
     it(
         'can create an appointment with same schedule for different doctor and user',
         function (): void {
-            $originalAppointment = StoreAppointmentRequestFactory::new()->create();
+            $doctor = DoctorFactory::new()->createOne();
+            $clinic = ClinicFactory::new()->createOne();
+            $doctor->clinics()->sync($clinic);
+            $starts = CarbonImmutable::now();
+            $originalAppointment = [
+                'doctorId' => $doctor->id,
+                'clinicId' => $clinic->id,
+                'startsAt' => $starts,
+                'endsAt' => $starts->addHour(),
+            ];
             $userOriginal = UserFactory::new()->createOne();
 
             actingAs($userOriginal, 'api')->postJson(
@@ -107,9 +126,12 @@ describe('appointments', function (): void {
                 $originalAppointment
             );
 
-            $data = StoreAppointmentRequestFactory::new()->create();
-            $data['startsAt'] = $originalAppointment['startsAt'];
-            $data['endsAt'] = $originalAppointment['endsAt'];
+            $data = $originalAppointment;
+            $newDoctor = DoctorFactory::new()->createOne();
+            $data['doctorId'] = $newDoctor->id;
+            $newClinic = ClinicFactory::new()->createOne();
+            $newDoctor->clinics()->sync($newClinic->id);
+            $data['clinicId'] = $newClinic->id;
 
             $user = UserFactory::new()->createOne();
             $response = actingAs($user, 'api')->postJson(url("/api/users/$user->id/appointments"), $data);
@@ -166,7 +188,16 @@ describe('appointments', function (): void {
     });
 
     it('user can have multiple appointments, but not overlapping ones', function (): void {
-        $originalAppointment = StoreAppointmentRequestFactory::new()->create();
+        $doctor = DoctorFactory::new()->createOne();
+        $clinic = ClinicFactory::new()->createOne();
+        $doctor->clinics()->sync($clinic);
+        $starts = CarbonImmutable::now();
+        $originalAppointment = [
+            'doctorId' => $doctor->id,
+            'clinicId' => $clinic->id,
+            'startsAt' => $starts,
+            'endsAt' => $starts->addHour(),
+        ];
         $user = UserFactory::new()->createOne();
 
         $responseOriginal = actingAs($user, 'api')->postJson(
