@@ -15,13 +15,11 @@ class StoreAppointmentRequestFactory extends RequestFactory
     {
         $starts = fake()->dateTimeBetween('tomorrow', '+1 day');
         $ends = (clone $starts)->modify('+30 minutes');
-        $doctor = DoctorFactory::new()->createOne();
         $clinic = ClinicFactory::new()->createOne();
-        $doctor->clinics()->attach($clinic);
 
         return [
-            'doctorId' => $doctor->id,
-            'clinicId' =>$clinic->id,
+            'doctorId' => DoctorFactory::new()->withClinics($clinic),
+            'clinicId' => $clinic->id,
             'startsAt' => CarbonImmutable::parse($starts),
             'endsAt' => CarbonImmutable::parse($ends),
         ];

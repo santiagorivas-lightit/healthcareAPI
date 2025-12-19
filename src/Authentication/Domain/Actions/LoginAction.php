@@ -29,7 +29,7 @@ final readonly class LoginAction
         /** @var JWTGuard $guard */
         $guard = $this->factory->guard();
 
-        if (! $token = $guard->attempt($credentials->toArray())) {
+        if (! $token = $guard->attempt(['email'=> $credentials->email, 'password'=>$credentials->password])) {
             throw new UnauthenticatedException();
         }
 
