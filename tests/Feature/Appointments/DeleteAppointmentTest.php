@@ -14,8 +14,7 @@ describe('appointments', function (): void {
         /** @var Appointment $appointment **/
         $appointment = AppointmentFactory::new()->createOne();
 
-        $appointmentId = $appointment->id;
-        deleteJson(url("/api/appointments/$appointmentId"));
+        deleteJson(url("/api/$appointment->user_id/appointments/$appointment->id"));
 
         assertDatabaseMissing('appointments', [
             'doctor_id' => $appointment['doctorId'],

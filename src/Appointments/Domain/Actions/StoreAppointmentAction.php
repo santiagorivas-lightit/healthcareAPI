@@ -11,10 +11,11 @@ use Lightit\Appointments\App\Exceptions\OverlappingAppointmentsException;
 use Lightit\Appointments\Domain\DataTransferObjects\AppointmentDTO;
 use Lightit\Appointments\Domain\Models\Appointment;
 use Lightit\Doctors\Domain\Models\Doctor;
+use Lightit\Users\Domain\Models\User;
 
 class StoreAppointmentAction
 {
-    public function execute(AppointmentDTO $appointmentDto): Appointment
+    public function execute(User $user, AppointmentDTO $appointmentDto): Appointment
     {
         $appointment = new Appointment();
 
@@ -22,11 +23,11 @@ class StoreAppointmentAction
             throw new DoctorNotAssignedToSelectedClinicException();
         }
 
-        if ($this->overlappingAppointmentsExist($appointmentDto)) {
+        if ($this->overlappingAppointmentsExist($user, $appointmentDto)) {
             throw new OverlappingAppointmentsException();
         }
 
-        $appointment->user_id = $appointmentDto->userId;
+        $appointment->user_id = $user->id;
         $appointment->doctor_id = $appointmentDto->doctorId;
         $appointment->clinic_id = $appointmentDto->clinicId;
         $appointment->starts_at = $appointmentDto->startsAt;
@@ -46,7 +47,7 @@ class StoreAppointmentAction
             ->exists();
     }
 
-    private function overlappingAppointmentsExist(AppointmentDTO $appointmentDto): bool
+    private function overlappingAppointmentsExist(User $user, AppointmentDTO $appointmentDto): bool
     {
         $date = CarbonImmutable::parse($appointmentDto->startsAt)->toDateString();
 
@@ -54,9 +55,9 @@ class StoreAppointmentAction
             ->whereDate('starts_at', '=', $date)
             ->where('starts_at', '<', $appointmentDto->endsAt)
             ->where('ends_at', '>', $appointmentDto->startsAt)
-            ->where(function (Builder $query) use ($appointmentDto): void {
+            ->where(function (Builder $query) use ($user, $appointmentDto): void {
                 $query->where('doctor_id', $appointmentDto->doctorId)
-                    ->orWhere('user_id', $appointmentDto->userId);
+                    ->orWhere('user_id', $user->id);
             })
             ->exists();
     }

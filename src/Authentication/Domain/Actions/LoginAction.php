@@ -1,0 +1,43 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Lightit\Authentication\Domain\Actions;
+
+use Illuminate\Contracts\Auth\Factory as AuthFactory;
+use Lightit\Authentication\Domain\DataTransferObjects\CredentialsDto;
+use Lightit\Authentication\Domain\DataTransferObjects\LoginDto;
+use Lightit\Shared\App\Exceptions\Http\UnauthenticatedException;
+use PHPOpenSourceSaver\JWTAuth\Factory as JWTAuth;
+use PHPOpenSourceSaver\JWTAuth\JWTGuard;
+
+final readonly class LoginAction
+{
+    public const int MINUTES_TO_SECONDS = 60;
+
+    public function __construct(
+        private AuthFactory $factory,
+        private JWTAuth $jwtAuth,
+    ) {
+    }
+
+    /**
+     * @throws UnauthenticatedException
+     */
+    public function execute(CredentialsDto $credentials): LoginDto
+    {
+        /** @var JWTGuard $guard */
+        $guard = $this->factory->guard();
+
+        if (! $token = $guard->attempt(['email'=> $credentials->email, 'password'=>$credentials->password])) {
+            throw new UnauthenticatedException();
+        }
+
+        /** @var string $token */
+        return new LoginDto(
+            accessToken: $token,
+            tokenType: 'Bearer',
+            expiresIn: $this->jwtAuth->getTTL() * self::MINUTES_TO_SECONDS,
+        );
+    }
+}

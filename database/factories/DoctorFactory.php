@@ -30,7 +30,7 @@ class DoctorFactory extends Factory
     public function withClinics(Collection $clinics): static
     {
         return $this->afterCreating(function (Doctor $doctor) use ($clinics) {
-            $doctor->clinics()->attach($clinics);
+            $doctor->clinics()->sync($clinics);
         });
     }
 }
