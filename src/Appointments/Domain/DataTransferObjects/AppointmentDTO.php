@@ -11,7 +11,6 @@ readonly class AppointmentDTO
     public function __construct(
         public int $doctorId,
         public int $clinicId,
-        public int $userId,
         public CarbonImmutable $startsAt,
         public CarbonImmutable $endsAt,
     ) {

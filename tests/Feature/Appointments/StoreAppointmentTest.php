@@ -45,10 +45,6 @@ describe('appointments', function (): void {
             $data = StoreAppointmentRequestFactory::new()->create();
             $user = UserFactory::new()->createOne();
 
-            /** @var Doctor $doctor**/
-            $doctor = DoctorFactory::new()->createOne();
-            $data['doctorId'] = $doctor->id;
-
             $response = actingAs($user, 'api')->postJson(url("/api/users/$user->id/appointments"), $data);
 
             $response->assertStatus(409);
@@ -63,7 +59,16 @@ describe('appointments', function (): void {
     it(
         'can not create an appointment that overlaps with an existing doctor schedule',
         function (): void {
-            $originalAppointment = StoreAppointmentRequestFactory::new()->create();
+            $doctor = DoctorFactory::new()->createOne();
+            $clinic = ClinicFactory::new()->createOne();
+            $doctor->clinics()->sync($clinic);
+            $starts = CarbonImmutable::now();
+            $originalAppointment = [
+                'doctorId' => $doctor->id,
+                'clinicId' => $clinic->id,
+                'startsAt' => $starts,
+                'endsAt' => $starts->addHour(),
+            ];
             $userOriginal = UserFactory::new()->createOne();
 
             actingAs($userOriginal, 'api')->postJson(
@@ -86,7 +91,16 @@ describe('appointments', function (): void {
     );
 
     it('can not create an appointment that overlaps another of the same user', function (): void {
-        $originalAppointment = StoreAppointmentRequestFactory::new()->create();
+        $doctor = DoctorFactory::new()->createOne();
+        $clinic = ClinicFactory::new()->createOne();
+        $doctor->clinics()->sync($clinic);
+        $starts = CarbonImmutable::now();
+        $originalAppointment = [
+            'doctorId' => $doctor->id,
+            'clinicId' => $clinic->id,
+            'startsAt' => $starts,
+            'endsAt' => $starts->addHour(),
+        ];
         $user = UserFactory::new()->createOne();
 
         actingAs($user, 'api')->postJson(url("/api/users/$user->id/appointments"), $originalAppointment);
@@ -94,8 +108,8 @@ describe('appointments', function (): void {
         $data = $originalAppointment;
         /** @var Doctor $doctor**/
         $doctor = DoctorFactory::new()->createOne();
+        $doctor->clinics()->sync($clinic);
         $data['doctorId'] = $doctor->id;
-
 
         $response = actingAs($user, 'api')->postJson(url("/api/users/$user->id/appointments"), $data);
 
@@ -146,7 +160,13 @@ describe('appointments', function (): void {
     );
 
     it('appointment cannot be scheduled in the past', function (): void {
-        $data = StoreAppointmentRequestFactory::new()->create();
+        $doctor = DoctorFactory::new()->createOne();
+        $clinic = ClinicFactory::new()->createOne();
+        $doctor->clinics()->sync($clinic);
+        $data = [
+            'doctorId' => $doctor->id,
+            'clinicId' => $clinic->id,
+        ];
 
         $starts = fake()->dateTimeBetween('1800-01-01', '1800-12-31');
         $ends = (clone $starts)->modify('+30 minutes');
@@ -167,7 +187,13 @@ describe('appointments', function (): void {
     });
 
     it('appointment ends_at must be after starts_at', function (): void {
-        $data = StoreAppointmentRequestFactory::new()->create();
+        $doctor = DoctorFactory::new()->createOne();
+        $clinic = ClinicFactory::new()->createOne();
+        $doctor->clinics()->sync($clinic);
+        $data = [
+            'doctorId' => $doctor->id,
+            'clinicId' => $clinic->id,
+        ];
 
         $starts = fake()->dateTimeBetween('1800-01-01', '1800-12-31');
         $ends = (clone $starts)->modify('+30 minutes');

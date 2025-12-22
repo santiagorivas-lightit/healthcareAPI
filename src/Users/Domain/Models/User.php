@@ -13,7 +13,6 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Lightit\Appointments\Domain\Models\Appointment;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
-use Lightit\Appointments\Domain\Models\Appointment;
 
 /**
  * Domain\Users\Models\User
