@@ -7,6 +7,9 @@ namespace Lightit\Appointments\Domain\Models;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Notifications\Notification;
+use Lightit\Appointments\App\Exceptions\EmptyUserException;
 use Lightit\Clinics\Domain\Models\Clinic;
 use Lightit\Doctors\Domain\Models\Doctor;
 use Lightit\Users\Domain\Models\User;
@@ -14,12 +17,15 @@ use Lightit\Users\Domain\Models\User;
 /**
  * @property CarbonImmutable $starts_at
  * @property CarbonImmutable $ends_at
+ * @property CarbonImmutable $deleted_at
  * @property int             $user_id
  * @property int             $doctor_id
  * @property int             $clinic_id
 * **/
 class Appointment extends Model
 {
+    use Notifiable;
+
     protected $guarded = ['id'];
 
     protected function casts(): array
@@ -29,6 +35,22 @@ class Appointment extends Model
             'ends_at' => 'immutable_datetime',
             'deleted_at' => 'immutable_datetime',
         ];
+    }
+
+    /**
+     * Route notifications for the mail channel.
+     *
+     * @return array<string, string>|string
+     */
+    public function routeNotificationForMail(Notification $notification): array|string
+    {
+        $user = $this->user;
+
+        if (! $user) {
+            throw new EmptyUserException();
+        }
+
+        return $user->email;
     }
 
     /**

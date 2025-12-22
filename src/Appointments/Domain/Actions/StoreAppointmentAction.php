@@ -8,6 +8,7 @@ use Carbon\CarbonImmutable;
 use Illuminate\Contracts\Database\Query\Builder;
 use Lightit\Appointments\App\Exceptions\DoctorNotAssignedToSelectedClinicException;
 use Lightit\Appointments\App\Exceptions\OverlappingAppointmentsException;
+use Lightit\Appointments\App\Notifications\AppointmentCreatedNotification;
 use Lightit\Appointments\Domain\DataTransferObjects\AppointmentDTO;
 use Lightit\Appointments\Domain\Models\Appointment;
 use Lightit\Doctors\Domain\Models\Doctor;
@@ -34,6 +35,8 @@ class StoreAppointmentAction
         $appointment->ends_at = $appointmentDto->endsAt;
 
         $appointment->saveOrFail();
+
+        $appointment->notify(new AppointmentCreatedNotification());
 
         return $appointment;
     }
