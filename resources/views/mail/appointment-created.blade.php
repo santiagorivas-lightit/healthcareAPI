@@ -11,14 +11,14 @@
         <div class="container px-4 md:px-8 mx-auto pt-4 flex flex-col">
             <div>
                 <h1 class="text-3xl font-bold font-mono underline underline-offset-4"> Your appointment was successfully created! </h1>
-                <p class="pt-2 text-lg font-serif"> Remember to be at least 15 minutes early to the clinic {{$appointment->clinic->name}} </p>
+                <p class="pt-2 text-lg font-serif"> Remember to be at least 15 minutes early to the clinic {{$clinic->name}} </p>
                 <div class="text-dark-blue-800 pt-4">
                     <h2 class="text-2xl font-bold font-mono underline underline-offset-4"> Your appointment data: </h2>
                     <ul class="list-disc text-lg font-serif">
-                        <li> Appointment Number: {{$appointment->id}} </li>
-                        <li> Time: {{$appointment->starts_at}} </li>
-                        <li> Doctor: {{$appointment->doctor->name}} </li>
-                        <li> Clinic Address: {{$appointment->clinic->address}} </li>
+                        <li> Appointment Number: {{$appointmentNumber}} </li>
+                        <li> Time: {{$startingTime}} </li>
+                        <li> Doctor: {{$doctor->name}} </li>
+                        <li> Clinic Address: {{$clinic->address}} </li>
                     </ul>
                 </div>
             </div>

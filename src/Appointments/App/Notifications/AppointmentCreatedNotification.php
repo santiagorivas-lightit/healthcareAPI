@@ -26,8 +26,11 @@ class AppointmentCreatedNotification extends Notification implements ShouldQueue
     public function toMail(Appointment $notifiable): MailMessage
     {
         return new MailMessage()
-            ->markdown('mail.appointmentCreated', [
-                'appointment' => $notifiable,
+            ->markdown('mail.appointment-created', [
+                'appointmentNumber' => $notifiable->id,
+                'startingTime' => $notifiable->starts_at,
+                'clinic' => $notifiable->clinic,
+                'doctor' => $notifiable->doctor,
             ]);
     }
 }
