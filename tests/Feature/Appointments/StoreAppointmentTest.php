@@ -208,8 +208,6 @@ describe('appointments', function (): void {
 
         $data = $originalAppointment;
 
-
-
         $data['startsAt'] = $originalAppointment['startsAt']->addDay();
         $data['endsAt'] = $originalAppointment['endsAt']->addDay();
 
